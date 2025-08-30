@@ -8,7 +8,6 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // ✅ 初期値を同期的に取得（初回から正しい値）
   const [isAuthed, setAuthed] = useState<boolean>(() =>
     Boolean(localStorage.getItem(TOKEN_KEY)),
   );
