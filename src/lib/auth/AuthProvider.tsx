@@ -1,25 +1,12 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { AuthContext, type AuthContextValue } from "./context";
 
 const TOKEN_KEY = "demo_token_v1";
 
-type AuthContextValue = {
-  isAuthed: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
-  logout: () => void;
-};
-
-const AuthContext = createContext<AuthContextValue | null>(null);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [isAuthed, setAuthed] = useState<boolean>(false);
+  const [isAuthed, setAuthed] = useState(false);
 
   useEffect(() => {
     setAuthed(Boolean(localStorage.getItem(TOKEN_KEY)));
@@ -47,8 +34,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("AuthProvider is missing");
-  return ctx;
-}
+export default AuthProvider;
