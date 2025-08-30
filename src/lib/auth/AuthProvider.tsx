@@ -1,18 +1,19 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { AuthContext, type AuthContextValue } from "./context";
 
 const TOKEN_KEY = "demo_token_v1";
 
-const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+export default function AuthProvider({
   children,
-}) => {
-  const [isAuthed, setAuthed] = useState(false);
+}: {
+  children: React.ReactNode;
+}) {
+  // ✅ 初期値を同期的に取得（初回から正しい値）
+  const [isAuthed, setAuthed] = useState<boolean>(() =>
+    Boolean(localStorage.getItem(TOKEN_KEY)),
+  );
 
-  useEffect(() => {
-    setAuthed(Boolean(localStorage.getItem(TOKEN_KEY)));
-  }, []);
-
-  const value = useMemo<AuthContextValue>(
+  const value: AuthContextValue = useMemo(
     () => ({
       isAuthed,
       async login(username, password) {
@@ -32,6 +33,4 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export default AuthProvider;
+}
