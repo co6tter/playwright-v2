@@ -20,4 +20,7 @@ export class DashboardPage {
   async expectRowVisible(id: number) {
     await expect(this.rowById(id)).toBeVisible();
   }
+  async delete(id: number) {
+    await this.page.getByTestId(`delete-${id}`).click();
+  }
 }
