@@ -1,5 +1,6 @@
 import { test, expect } from "../../fixtures/base-test";
 import type { Item } from "../../../src/types";
+import { saveState, tryReadState } from "../../helpers/state";
 
 const seed = async (page: import("@playwright/test").Page, records: Item[]) => {
   await page.addInitScript((recs) => {
@@ -22,7 +23,15 @@ test.describe("items CRUD", () => {
     await itemForm.fill({ name: "Donut", qty: 12, price: 250 });
     await itemForm.save();
 
-    await expect(dashboard["page"].getByTestId("item-row-4")).toContainText(
+    const items = await dashboard["page"].evaluate(() => {
+      return JSON.parse(localStorage.getItem("demo_items_v1") || "[]");
+    });
+
+    const createdItem = items.find((item: Item) => item.name === "Donut");
+    const id = createdItem?.id;
+    await saveState("item.json", { id });
+
+    await expect(dashboard["page"].getByTestId(`item-row-${id}`)).toContainText(
       "Donut",
     );
   });
@@ -38,6 +47,13 @@ test.describe("items CRUD", () => {
     await dashboard.openEdit(4);
     await itemForm.fill({ name: "Donut XL", qty: 24, price: 400 });
     await itemForm.save();
+
+    const state = await tryReadState<{ id: number }>("item.json");
+    if (!state) {
+      throw new Error("item.json not found or invalid");
+    }
+    const { id } = state;
+    console.log(id);
 
     await expect(dashboard["page"].getByTestId("item-row-4")).toContainText(
       "Donut XL",
