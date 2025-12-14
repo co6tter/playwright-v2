@@ -1,69 +1,135 @@
-# React + TypeScript + Vite
+# playwright-v2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This is a modern web application with comprehensive E2E testing using Playwright. The application features user authentication and item management functionality, with tests following best practices including Page Object Model pattern, fixtures, and state management.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
 
-## Expanding the ESLint configuration
+### Frontend
+- **React** (v19.1.1) - UI framework
+- **TypeScript** (v5.8.3) - Type-safe JavaScript
+- **Vite** (v7.1.2) - Build tool and dev server
+- **TailwindCSS** (v4.1.12) - Utility-first CSS framework
+- **React Router** (v7.8.2) - Client-side routing
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Testing
+- **Playwright** (v1.55.0) - E2E testing framework
+- **Test Architecture**: Page Object Model (POM), Fixtures, State Helpers
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Code Quality
+- **ESLint** - Linting
+- **Prettier** - Code formatting
+- **TypeScript ESLint** - TypeScript-specific linting rules
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Setup
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Install dependencies:
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+2. Install Playwright browsers:
+```bash
+npx playwright install
 ```
+
+3. Set environment variables (optional):
+```bash
+export BASE_URL=http://localhost:5173
+```
+
+## Usage
+
+### Development
+
+Start the development server:
+```bash
+npm run dev
+```
+The app will be available at [http://localhost:5173](http://localhost:5173)
+
+### Build
+
+Build for production:
+```bash
+npm run build
+```
+
+### Preview
+
+Preview production build:
+```bash
+npm run preview
+```
+
+### Testing
+
+Run E2E tests:
+```bash
+npx playwright test
+```
+
+Run tests with UI:
+```bash
+npx playwright test --ui
+```
+
+Run tests in headed mode:
+```bash
+npx playwright test --headed
+```
+
+View test report:
+```bash
+npx playwright show-report
+```
+
+### Code Quality
+
+Run linter:
+```bash
+npm run lint
+```
+
+## Directory Structure
+
+```
+playwright-v2/
+├── src/                    # Application source code
+│   ├── components/        # React components
+│   │   └── NavBar.tsx
+│   ├── pages/             # Page components
+│   │   ├── Login.tsx
+│   │   ├── Dashboard.tsx
+│   │   └── ItemForm.tsx
+│   ├── lib/               # Utility libraries
+│   │   └── auth/          # Authentication utilities
+│   └── assets/            # Static assets
+├── tests/                 # Playwright test suite
+│   ├── e2e/               # E2E test specs
+│   │   ├── auth/          # Authentication tests
+│   │   ├── items/         # Item management tests
+│   │   ├── nav.spec.ts
+│   │   └── nav-with-pom.spec.ts
+│   ├── pom/               # Page Object Models
+│   │   ├── LoginPage.ts
+│   │   ├── DashboardPage.ts
+│   │   ├── ItemFormPage.ts
+│   │   └── Navbar.ts
+│   ├── fixtures/          # Test fixtures
+│   │   └── base-test.ts
+│   ├── helpers/           # Test helper functions
+│   │   └── state.ts
+│   └── .auth/             # Authentication setup
+│       └── setup.setup.ts
+├── .auth/                 # Storage states for authenticated sessions
+├── playwright.config.ts   # Playwright configuration
+├── vite.config.ts         # Vite configuration
+├── tsconfig.json          # TypeScript configuration
+└── package.json           # Project dependencies
+```
+
+## License
+
+This repository is for personal/private use only.
